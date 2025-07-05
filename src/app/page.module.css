@@ -1,0 +1,54 @@
+.container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.title {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.inputField {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.eventItem {
+  border: 1px solid #eee;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+}
+
+.button {
+  background-color: #3498db; /* Color azul para los botones */
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 25px; /* Bordes redondeados */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Transición suave */
+}
+
+.button:hover {
+  background-color: #2980b9; /* Azul más oscuro al pasar el mouse */
+}
+
+/* Nueva clase para el botón de eliminar */
+.deleteButton {
+  background-color: #ff4444; /* Rojo vibrante */
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 25px; /* Bordes redondeados */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Transición suave */
+}
+
+.deleteButton:hover {
+  background-color: #cc0000; /* Rojo más oscuro al pasar el mouse */
+}

@@ -1,133 +1,167 @@
 'use client'
-import { useState, useEffect } from 'react'
-import Styles from './page.module.css'
+import { useState } from 'react';
+import Styles from './page.module.css';
+import { validarFormularioEvento } from './Validaciones/Validar';
+import { useEventStorage, useFormHandler } from './Effect/Effect';
 
+interface Evento {
+  nombre: string;
+  asistentes: string;
+  tipo: string;
+  descripcion: string;
+  fecha: string;
+}
 export default function App() {
-  const eventoInicial = {
+  const eventoInicial: Evento = {
     nombre: '',
     asistentes: '',
     tipo: '',
     descripcion: '',
     fecha: ''
-  }
+  };
+  const { eventos, setEventos } = useEventStorage();
+  const { 
+    formValues: evento, 
+    setFormValues: setEvento, 
+    handleChange, 
+    resetForm 
+  } = useFormHandler(eventoInicial);
+  const [modoEditar, setModoEditar] = useState(false);
+  const [indiceEditar, setIndiceEditar] = useState<number | null>(null);
+  const [error, setError] = useState('');
+  const [eventoAEliminar, setEventoAEliminar] = useState<number | null>(null);
 
-  const [evento, setEvento] = useState(eventoInicial)
-  const [eventos, setEventos] = useState<any[]>([])
-  const [modoEditar, setModoEditar] = useState(false)
-  const [indiceEditar, setIndiceEditar] = useState(null)
-  const [error, setError] = useState('')
-  const [eventoAEliminar, setEventoAEliminar] = useState<number | null>(null)
-
-  useEffect(() => {
-    const guardados = localStorage.getItem('eventos')
-    if (guardados) {
-      setEventos(JSON.parse(guardados))
-    }
-  }, [])
-  useEffect(() => {
-    localStorage.setItem('eventos', JSON.stringify(eventos))
-  }, [eventos])
-  const handleChange = (e: any) => {
-    setEvento({ ...evento, [e.target.name]: e.target.value })
-  }
-  const validarEvento = () => {
-  if (!evento.nombre || !evento.asistentes || !evento.tipo || !evento.descripcion || !evento.fecha) {
-    return 'Todos los campos son obligatorios.';
-  }
-  const asistentes = parseInt(evento.asistentes, 10);
-  if (asistentes <= 0) {
-    return 'El número de asistentes debe ser un número positivo.';
-  }
-  if (new Date(evento.fecha) < new Date()) {
-    return 'La fecha tiene que ser actual.';
-  }
-  return '';
-}
-  const guardar = () => {
-    const errorValidacion = validarEvento();
+  const guardarEvento = () => {
+    const errorValidacion = validarFormularioEvento(evento);
     if (errorValidacion) {
       setError(errorValidacion);
       return;
     }
     setError('');
     if (modoEditar && indiceEditar !== null) {
-      const copia = [...eventos]
-      copia[indiceEditar] = evento
-      setEventos(copia)
-      setModoEditar(false)
-      setIndiceEditar(null)
+      const actualizados = [...eventos];
+      actualizados[indiceEditar] = {...evento};
+      setEventos(actualizados);
+      setModoEditar(false);
+      setIndiceEditar(null);
     } else {
-      setEventos([...eventos, evento])
+      setEventos([...eventos, {...evento}]);
     }
-    setEvento(eventoInicial)
-  }
-  const editar = (index: number) => {
-    setEvento(eventos[index])
-    setModoEditar(true)
-    setIndiceEditar(index)
-  }
-  const confirmarEliminar = (index: number) => {
-    setEventoAEliminar(index)
-  }
-  const cancelarEliminar = () => {
-    setEventoAEliminar(null)
-  }
-  const eliminar = () => {
+    
+    resetForm();
+  };
+  const editarEvento = (index: number) => {
+    setEvento(eventos[index]);
+    setModoEditar(true);
+    setIndiceEditar(index);
+  };
+  const confirmarEliminarEvento = (index: number) => {
+    setEventoAEliminar(index);
+  };
+  const cancelarEliminarEvento = () => {
+    setEventoAEliminar(null);
+  };
+  const eliminarEvento = () => {
     if (eventoAEliminar !== null) {
-      const copia = eventos.filter((_, i) => i !== eventoAEliminar)
-      setEventos(copia)
-      setEventoAEliminar(null)
+      const nuevosEventos = eventos.filter((_, i) => i !== eventoAEliminar);
+      setEventos(nuevosEventos);
+      setEventoAEliminar(null);
     }
-  }
+  };
   return (
     <div className={Styles.container}>
-      <h2 className={Styles.titulo}>{modoEditar ? 'Editar evento' : 'REGISTRAR EVENTO'}</h2>
+      <h2 className={Styles.titulo}>{modoEditar ? 'Editar Evento' : 'Registrar Evento'}</h2>
       {error && <p className={Styles.error}>{error}</p>}
-      <input className={Styles.input} name="nombre" placeholder="Nombre del evento" 
-      value={evento.nombre} onChange={handleChange} /><br />
-      <input className={Styles.input} name="asistentes" type="number" 
-      placeholder="Asistentes" value={evento.asistentes} onChange={handleChange} /><br />
-      <select className={Styles.select} name="tipo" value={evento.tipo} onChange={handleChange}>
-        <option className={Styles.Selection}value="">Selecciona tipo</option>
+      <input 
+        className={Styles.input} 
+        name="nombre" 
+        placeholder="Nombre del evento" 
+        value={evento.nombre} 
+        onChange={handleChange} 
+      />
+      <br />
+      <input 
+        className={Styles.input} 
+        name="asistentes" 
+        type="number" 
+        placeholder="Asistentes" 
+        value={evento.asistentes} 
+        onChange={handleChange} 
+      />
+      <br />
+      <select 
+        className={Styles.select} 
+        name="tipo" 
+        value={evento.tipo} 
+        onChange={handleChange}
+      >
+        <option value="">Selecciona tipo</option>
         <option value="Reunión">Reunión</option>
         <option value="Taller">Taller</option>
         <option value="Charla">Charla</option>
-      </select><br />
-      <textarea className={Styles.textarea} name="descripcion" 
-      placeholder="Descripción" value={evento.descripcion} onChange={handleChange}></textarea><br />
-      <input className={Styles.input} name="fecha" type="date" 
-      value={evento.fecha} onChange={handleChange} /><br /><br />
-
-      <button className={Styles.button} onClick={guardar}>
+      </select>
+      <br />
+      <textarea 
+        className={Styles.textarea} 
+        name="descripcion" 
+        placeholder="Descripción" 
+        value={evento.descripcion} 
+        onChange={handleChange}
+      />
+      <br />
+      <input 
+        className={Styles.input} 
+        name="fecha" 
+        type="date" 
+        value={evento.fecha} 
+        onChange={handleChange} 
+      />
+      <br /><br />
+      <button className={Styles.button} onClick={guardarEvento}>
         {modoEditar ? 'Guardar cambios' : 'Registrar'}
       </button>
       <hr className={Styles.divisor} />
-      <h3 className={Styles.subtitulo}>Eventos guardados</h3>
-      {eventos.length === 0 && <p className={Styles.sinEventos}>No hay eventos aún.</p>}
+      <h3 className={Styles.subtitulo}>Eventos Guardados</h3>
+      {eventos.length === 0 && (
+        <p className={Styles.sinEventos}>No hay eventos registrados aún.</p>
+      )}
       {eventoAEliminar !== null && (
         <div className={Styles.modal}>
           <div className={Styles.modalContent}>
             <h3>¿Estás seguro de eliminar este evento?</h3>
             <p>Esta acción no se puede deshacer.</p>
             <div className={Styles.modalButtons}>
-              <button className={Styles.button} onClick={cancelarEliminar}>Cancelar</button>
-              <button className={`${Styles.button} ${Styles.deleteButton}`} onClick={eliminar}>
+              <button className={Styles.button} onClick={cancelarEliminarEvento}>
+                Cancelar
+              </button>
+              <button 
+                className={`${Styles.button} ${Styles.deleteButton}`} 
+                onClick={eliminarEvento}
+              >
                 Eliminar
               </button>
             </div>
           </div>
         </div>
       )}
-      {eventos.map((e, i) => (
-        <div key={i} className={Styles.tajetaEvento}>
+      {eventos.map((e, index) => (
+        <div key={index} className={Styles.tarjetaEvento}>
           <h4 className={Styles.nombreEvento}>{e.nombre}</h4>
           <p className={Styles.detalleEvento}>Tipo: {e.tipo}</p>
           <p className={Styles.detalleEvento}>Asistentes: {e.asistentes}</p>
           <p className={Styles.detalleEvento}>Descripción: {e.descripcion}</p>
-          <p className={Styles.detalleEvento}>Fecha: {e.fecha}</p>
+          <p className={Styles.detalleEvento}>Fecha: {new Date(e.fecha).toLocaleDateString()}</p>
           <div className={Styles.controles}>
-            <button className={Styles.button} onClick={() => editar(i)}>Editar</button>
-            <button className={`${Styles.button} ${Styles.deleteButton}`} onClick={() => confirmarEliminar(i)}>
+            <button 
+              className={Styles.button} 
+              onClick={() => editarEvento(index)}
+            >
+              Editar
+            </button>
+            <button 
+              className={`${Styles.button} ${Styles.deleteButton}`} 
+              onClick={() => confirmarEliminarEvento(index)}
+            >
               Eliminar
             </button>
           </div>

@@ -78,18 +78,14 @@ const MostrarEvento: React.FC = () => {
   return (
     <div className={Styles.menuContainer}>
       <div className={Styles.menuHeader}>
-        <img 
-          src="https://placehold.co/80x80" 
-          alt="Logo del gestor de eventos, círculo azul con un icono de calendario en el centro"
-          className={Styles.logo}
-        />
-        <h1 className={Styles.tituloPrincipal}>SELECCIONA TU MUSICA</h1>
+      
+        <h1 className={Styles.tituloPrincipal}>SELECCIONA TU CONSIERTO</h1>
       </div>
       
       {!appDesplegada && (
         <div className={Styles.pantallaInicio}>
           <p className={Styles.bienvenida}>
-            Bienvenido al sistema de gestión de Musica. Aquí podrás registrar, editar y eliminar toda la musica que deseas.
+            Bienvenido. Aquí podrás registrar, editar y eliminar tus consiertos.
           </p>
           <button 
             className={`${Styles.button} ${Styles.buttonLarge}`}
@@ -109,7 +105,7 @@ const MostrarEvento: React.FC = () => {
 
       {appDesplegada && (
         <div className={Styles.contenidoDesplegable}>
-          {/* Botón para volver */}
+          {}
           <button 
             className={`${Styles.button} ${Styles.backButton}`}
             onClick={() => setAppDesplegada(false)}
@@ -117,13 +113,13 @@ const MostrarEvento: React.FC = () => {
             ← Volver al inicio
           </button>
 
-          {/* Contenido principal de la aplicación */}
+          {}
           <div className={Styles.formularioContainer}>
-            <h2 className={Styles.titulo}>{modoEditar ? 'Editar Musica' : 'Registrar Musica'}</h2>
+            <h2 className={Styles.titulo}>{modoEditar ? 'Editar cosierto' : 'Registrar consierto'}</h2>
             {error && <p className={Styles.error}>{error}</p>}
             
             <div className={Styles.formGroup}>
-              <label className={Styles.label}>Nombre del Musica:</label>
+              <label className={Styles.label}>Nombre Consierto:</label>
               <input 
                 className={Styles.input} 
                 name="nombre" 
@@ -134,7 +130,7 @@ const MostrarEvento: React.FC = () => {
             </div>
 
             <div className={Styles.formGroup}>
-              <label className={Styles.label}>Número de cantantes:</label>
+              <label className={Styles.label}>Número asientos:</label>
               <input 
                 className={Styles.input} 
                 name="asistentes" 
@@ -146,19 +142,19 @@ const MostrarEvento: React.FC = () => {
             </div>
 
             <div className={Styles.formGroup}>
-              <label className={Styles.label}>Tipo de genero:</label>
+              <label className={Styles.label}>Tipo de genero de la musica:</label>
               <select 
                 className={Styles.select} 
                 name="tipo" 
                 value={evento.tipo} 
                 onChange={handleChange}
               >
-                <option value="">Selecciona el tipo de evento</option>
-                <option value="Reunión">Rock</option>
-                <option value="Taller">Pop</option>
-                <option value="Charla">Cumbia</option>
-                <option value="Conferencia">Regge</option>
-                <option value="Seminario">Salsa</option>
+                <option value="">Selecciona tu tipo de musica</option>
+                <option value="Rock">Rock</option>
+                <option value="Pop">Pop</option>
+                <option value="Cumbia">Cumbia</option>
+                <option value="Reggea">Regge</option>
+                <option value="Salsa">Salsa</option>
               </select>
             </div>
 
@@ -174,7 +170,7 @@ const MostrarEvento: React.FC = () => {
             </div>
 
             <div className={Styles.formGroup}>
-              <label className={Styles.label}>Ingrese fecha del consierto:</label>
+              <label className={Styles.label}>fecha del consierto:</label>
               <input 
                 className={Styles.input} 
                 name="fecha" 
@@ -185,16 +181,16 @@ const MostrarEvento: React.FC = () => {
             </div>
 
             <button className={Styles.button} onClick={guardarEvento}>
-              {modoEditar ? 'Guardar cambios' : 'Registrar evento'}
+              {modoEditar ? 'Guardar cambios' : 'Registrar consierto'}
             </button>
           </div>
 
           <hr className={Styles.divisor} />
           
           <div className={Styles.listaEventos}>
-            <h3 className={Styles.subtitulo}>Eventos Registrados</h3>
+            <h3 className={Styles.subtitulo}>Consierto Registrados</h3>
             {eventos.length === 0 && (
-              <p className={Styles.sinEventos}>No hay eventos registrados aún.</p>
+              <p className={Styles.sinEventos}>No hay eventos consierto aún.</p>
             )}
             
             {eventos.map((e, index) => (

@@ -83,13 +83,13 @@ const MostrarEvento: React.FC = () => {
           alt="Logo del gestor de eventos, círculo azul con un icono de calendario en el centro"
           className={Styles.logo}
         />
-        <h1 className={Styles.tituloPrincipal}>Gestor de Eventos</h1>
+        <h1 className={Styles.tituloPrincipal}>SELECCIONA TU MUSICA</h1>
       </div>
       
       {!appDesplegada && (
         <div className={Styles.pantallaInicio}>
           <p className={Styles.bienvenida}>
-            Bienvenido al sistema de gestión de eventos. Aquí podrás registrar, editar y eliminar todos tus eventos.
+            Bienvenido al sistema de gestión de Musica. Aquí podrás registrar, editar y eliminar toda la musica que deseas.
           </p>
           <button 
             className={`${Styles.button} ${Styles.buttonLarge}`}
@@ -119,22 +119,22 @@ const MostrarEvento: React.FC = () => {
 
           {/* Contenido principal de la aplicación */}
           <div className={Styles.formularioContainer}>
-            <h2 className={Styles.titulo}>{modoEditar ? 'Editar Evento' : 'Registrar Evento'}</h2>
+            <h2 className={Styles.titulo}>{modoEditar ? 'Editar Musica' : 'Registrar Musica'}</h2>
             {error && <p className={Styles.error}>{error}</p>}
             
             <div className={Styles.formGroup}>
-              <label className={Styles.label}>Nombre del evento</label>
+              <label className={Styles.label}>Nombre del Musica:</label>
               <input 
                 className={Styles.input} 
                 name="nombre" 
-                placeholder="Ej: Conferencia de tecnología" 
+                placeholder="Ej: llamada de emergencia" 
                 value={evento.nombre} 
                 onChange={handleChange} 
               />
             </div>
 
             <div className={Styles.formGroup}>
-              <label className={Styles.label}>Número de asistentes</label>
+              <label className={Styles.label}>Número de cantantes:</label>
               <input 
                 className={Styles.input} 
                 name="asistentes" 
@@ -146,7 +146,7 @@ const MostrarEvento: React.FC = () => {
             </div>
 
             <div className={Styles.formGroup}>
-              <label className={Styles.label}>Tipo de evento</label>
+              <label className={Styles.label}>Tipo de genero:</label>
               <select 
                 className={Styles.select} 
                 name="tipo" 
@@ -154,27 +154,27 @@ const MostrarEvento: React.FC = () => {
                 onChange={handleChange}
               >
                 <option value="">Selecciona el tipo de evento</option>
-                <option value="Reunión">Reunión</option>
-                <option value="Taller">Taller</option>
-                <option value="Charla">Charla</option>
-                <option value="Conferencia">Conferencia</option>
-                <option value="Seminario">Seminario</option>
+                <option value="Reunión">Rock</option>
+                <option value="Taller">Pop</option>
+                <option value="Charla">Cumbia</option>
+                <option value="Conferencia">Regge</option>
+                <option value="Seminario">Salsa</option>
               </select>
             </div>
 
             <div className={Styles.formGroup}>
-              <label className={Styles.label}>Descripción</label>
+              <label className={Styles.label}></label>
               <textarea 
                 className={Styles.textarea} 
                 name="descripcion" 
-                placeholder="Describe tu evento..." 
+                placeholder="Describe tu gusto de musica" 
                 value={evento.descripcion} 
                 onChange={handleChange}
               />
             </div>
 
             <div className={Styles.formGroup}>
-              <label className={Styles.label}>Fecha del evento</label>
+              <label className={Styles.label}>Ingrese fecha del consierto:</label>
               <input 
                 className={Styles.input} 
                 name="fecha" 
@@ -250,5 +250,4 @@ const MostrarEvento: React.FC = () => {
     </div>
   );
 }
-
 export default MostrarEvento;
